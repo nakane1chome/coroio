@@ -35,6 +35,11 @@ inline uint64_t ntohll(uint64_t value) {
 #endif
 }
 #endif // _WIN32_WINNT < 0x0A00
+#elif defined(__EMSCRIPTEN__)
+#include "emscriptem_netinet.h"
+
+#else
+#error "Unsupported platform"
 #endif
 
 #include <random>

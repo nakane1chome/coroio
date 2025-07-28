@@ -14,6 +14,12 @@ int epoll_pwait2(HANDLE ephnd, struct epoll_event* events, int maxevents, const 
     // TODO: support sigmask
     return epoll_wait(ephnd, events, maxevents, timeout);
 }
+#elif defined(__linux__) || defined(__APPLE__) || defined(__FreeBSD__)
+  // Native support
+#elif defined(__EMSCRIPTEN__)
+#include "emscriptem_epoll.h"
+#else
+#error "unsupported platform"
 #endif
 }
 

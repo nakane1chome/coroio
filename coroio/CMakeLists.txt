@@ -28,6 +28,14 @@ if (WIN32)
   set_source_files_properties(wepoll.c PROPERTIES COMPILE_FLAGS "-w")
 endif ()
 
+if (EMSCRIPTEN)
+  list(APPEND SOURCES
+    emscriptem_epoll.c
+    emscriptem_ppoll.c
+  )   
+endif()
+
+
 add_library(coroio ${SOURCES})
 
 target_include_directories(coroio PUBLIC ${URING_INCLUDE_DIRS} ${OPENSSL_INCLUDE_DIRS} ${CMAKE_CURRENT_SOURCE_DIR}/..)

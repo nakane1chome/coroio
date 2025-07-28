@@ -22,6 +22,10 @@ int ppoll(struct pollfd* fds, int nfds, const struct timespec* ts, const void* /
     // TODO: support sigmask
     return WSAPoll(fds, nfds, timeout);
 }
+#elif defined(__linux__) || defined(__EMSCRIPTEN__)
+// native support
+#else
+#error "unsupported platform"
 #endif
 
 } // namespace

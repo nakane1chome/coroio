@@ -3,6 +3,10 @@ if (EXISTS ${CMAKE_BINARY_DIR}/local.cmake)
 include(${CMAKE_BINARY_DIR}/local.cmake)
 endif ()
 
+if (EMSCRIPTEN)
+    set(CMAKE_EXECUTABLE_SUFFIX ".html") 
+endif()
+
 project(netlib)
 enable_testing()
 
