@@ -86,11 +86,13 @@ void TSocket::Bind(const TAddress& addr) {
     }
     LocalAddr_ = addr;
     auto [rawaddr, len] = LocalAddr_->RawAddr();
+#if !defined(__EMSCRIPTEN__)
     int optval = 1;
     socklen_t optlen = sizeof(optval);
     if (setsockopt(Fd_, SOL_SOCKET, SO_REUSEADDR, (char*) &optval, optlen) < 0) {
         throw std::system_error(errno, std::generic_category(), "setsockopt");
     }
+#endif
     if (bind(Fd_, rawaddr, len) < 0) {
         throw std::system_error(errno, std::generic_category(), "bind");
     }
@@ -100,6 +102,7 @@ void TSocket::Listen(int backlog) {
     if (listen(Fd_, backlog) < 0) {
         throw std::system_error(errno, std::generic_category(), "listen");
     }
+    
 }
 
 const std::optional<TAddress>& TSocket::LocalAddr() const {

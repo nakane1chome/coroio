@@ -55,15 +55,16 @@ void TSelect::Poll() {
 
     Reset();
 
-#ifdef _WIN32
+#if defined(_WIN32) || defined(__EMSCRIPTEN__)
     timeval tv;
     tv.tv_sec = ts.tv_sec;
     tv.tv_usec = ts.tv_nsec / 1000;
     if (select(InEvents_.size(), ReadFds(), WriteFds(), nullptr, &tv) < 0) {
+        throw std::system_error(errno, std::generic_category(), "select");
 #else
     if (pselect(InEvents_.size(), ReadFds(), WriteFds(), nullptr, &ts, nullptr) < 0) {
+        throw std::system_error(errno, std::generic_category(), "pselect");
 #endif
-        throw std::system_error(errno, std::generic_category(), "select");
     }
 
     for (int k=0; k < static_cast<int>(InEvents_.size()); ++k) {
